@@ -4,7 +4,7 @@
  * imports.
  */
 
-var test = require('tape-catch')
+var test = require('bandage')
 var path = require('path')
 
 /*!
@@ -18,9 +18,7 @@ var autorun = require('./')
  */
 
 var fixtures = [
-  { name: './test', file: 'root-test.test.js' },
-  { name: './lib', file: 'lib-sub-test.tests.js' },
-  { name: './app', file: 'tests.js' }
+  { name: './test', file: 'root-test.test.js' }
 ]
 
 /*!
@@ -33,11 +31,11 @@ var autorunFiles = autorun().map(basename)
  * tests.
  */
 
-test('autorun() locates test files in default locations', function (t) {
+test('autorun() locates test files in default locations', function * (t) {
   t.plan(fixtures.length)
 
   fixtures.forEach(function (f) {
-    t.assert(exists(f.file), f.name)
+    t.ok(exists(f.file), f.name)
   })
 })
 
@@ -62,3 +60,4 @@ function exists (file) {
 function basename (file) {
   return path.basename(file)
 }
+

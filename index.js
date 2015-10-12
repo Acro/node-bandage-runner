@@ -1,63 +1,61 @@
 'use strict'
 
-/*!
- * imports.
- */
-
-var apply = require('apply-or')
-var array = require('to-array.js')
 var glob = require('globby').sync
 var path = require('path')
-var root = require('package.root')
-var test = require('tape-catch')
-
-/*!
- * exports.
- */
-
-module.exports = runner
-
-/*!
- * patterns.
- */
+var bandage = require('bandage')
+var check = require('syntax-error')
+var fs = require('fs')
 
 var patterns = [
   'test/**/*.test{,s}.js',
-  'test/**/test{,s}.js',
-  'lib/**/*.test{,s}.js',
-  'lib/**/test{,s}.js',
-  'app/**/*.test{,s}.js',
-  'app/**/test{,s}.js'
+  'test/**/test{,s}.js'
 ]
 
-/*!
- * A tape runner API allowing you to create custom test runners.
- */
+function runner (params, files, endCb) {
+  var list
 
-function runner (params, files) {
-  var list = array(files || globs())
+  if (files) {
+    list = Array.isArray(files) ? files : [files]
+  } else {
+    list = globs()
+  }
+
+  var testParams = [bandage].concat(params)
 
   list.forEach(function (file) {
-    apply(require(path.resolve(file)), [test].concat(params))
+    try {
+      var func = require(path.resolve(file))
+    } catch (e) {
+      if (e instanceof SyntaxError) {
+        var src = fs.readFileSync(path.resolve(file))
+        var err = check(src, file)
+        throw err
+      } else {
+        throw e
+      }
+    }
+
+    if (typeof func === 'function') {
+      func.apply(null, testParams)
+    }
   })
+
+  if (!endCb) {
+    endCb = function () {}
+  }
+
+  bandage.run(null, endCb)
 
   return list
 }
-
-/**
- * Find test files via glob patterns.
- * @return {Array}
- */
 
 function globs () {
   return glob(patterns.map(rootify))
 }
 
-/**
- * Prepend root directory name to pattern.
- * @return {String}
- */
-
 function rootify (pattern) {
-  return path.resolve(root.path, pattern)
+  return path.resolve(process.cwd(), pattern)
 }
+
+module.exports = runner
+
