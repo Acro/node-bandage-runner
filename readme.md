@@ -13,10 +13,22 @@ npm install bandage-runner --save-dev
 
 ```js
 var runner = require('bandage-runner')
+var testHelper = require('./your-test-helper')
+var dependencyContainer = require('./your-dependency-container')
 
-var testParams = ['custom', 'data']
+var testParams = [testHelper, dependencyContainer]
 
 runner(testParams)
+```
+
+###### test/example.test.js
+
+```js
+module.exports = function(should, helper, container) {
+  should('be awesome', function* (t) {
+    t.ok(true, 'checked')
+  }
+}
 ```
 
 ###### package.json
