@@ -1,7 +1,7 @@
 {
   "name": "bandage-runner",
   "description": "A Bandage runner API allowing you to create custom test runners.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Pavel Pokorny <pajkycz@gmail.com>",
   "bugs": {
     "url": "https://github.com/Pajk/node-bandage-runner/issues"
