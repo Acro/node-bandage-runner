@@ -7,8 +7,8 @@ var check = require('syntax-error')
 var fs = require('fs')
 
 var patterns = [
-  'test/**/*.test{,s}.js',
-  'test/**/test{,s}.js'
+  'build/test/**/*.test{,s}.js',
+  'build/test/**/test{,s}.js'
 ]
 
 function runner (params, files, endCb) {
@@ -35,8 +35,8 @@ function runner (params, files, endCb) {
       }
     }
 
-    if (typeof func === 'function') {
-      func.apply(null, testParams)
+    if (typeof func.default === 'function') {
+      func.default.apply(null, testParams)
     }
   })
 
