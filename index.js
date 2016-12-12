@@ -2,7 +2,7 @@
 
 var glob = require('globby').sync
 var path = require('path')
-var bandage = require('bandage')
+var bandage = require('bandage-ts')
 var check = require('syntax-error')
 var fs = require('fs')
 
