@@ -1,4 +1,4 @@
-# bandage-runner
+# bandage-runner-ts
 > A [bandage] runner API allowing you to create custom test runners.
 
 [![Build Status](http://img.shields.io/travis/Pajk/node-bandage-runner.svg)](https://travis-ci.org/Pajk/node-bandage-runner) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard) [![npm](https://img.shields.io/npm/v/bandage-runner.svg)](https://www.npmjs.org/package/bandage-runner)
@@ -23,9 +23,35 @@ runner(testParams)
 
 ###### test/example.test.js
 
+Works with default export:
+
 ```js
 module.exports = function(should, helper, container) {
   should('be awesome', function* (t) {
+    t.ok(true, 'checked')
+  }
+}
+```
+
+###### test/example2.test.js
+
+Works with exported functions that start or end with "test" (case insensitive):
+
+```js
+exports.test_one = function(should, helper, container) {
+  should('be awesome once', function* (t) {
+    t.ok(true, 'checked')
+  }
+}
+
+exports.second_test = function(should, helper, container) {
+  should('be awesome twice', function* (t) {
+    t.ok(true, 'checked')
+  }
+}
+
+exports.thirdTest = function(should, helper, container) {
+  should('be awesome three times', function* (t) {
     t.ok(true, 'checked')
   }
 }
