@@ -37,6 +37,17 @@ function runner (params, files, endCb) {
 
     if (typeof func.default === 'function') {
       func.default.apply(null, testParams)
+    } else {
+      for (var prop in func) {
+        if (!func.hasOwnProperty(prop) || typeof func[prop] !== 'function') {
+          continue
+        }
+        var lower = prop.toLowerCase()
+        if (lower.startsWith('test')
+           || lower.endsWith('test')) {
+          func[prop].apply(null, testParams)
+        }
+      }
     }
   })
 
